@@ -1,0 +1,53 @@
+// Create a new project
+project --topLevelPackage com.sable.cb --packaging WAR
+
+
+// Setup JPA persistence using EclipseLink and H2
+jpa setup --provider HIBERNATE --database MYSQL
+
+// Create domain entities
+entity jpa --class ~.domain.Users --activeRecord false --testAutomatically
+field string --fieldName fullname --notNull
+field string --fieldName email --notNull
+field string --fieldName password --notNull
+
+entity jpa --class ~.domain.Organization --activeRecord false --testAutomatically
+field string --fieldName name --notNull
+field string --fieldName street --notNull
+field string --fieldName city --notNull
+field string --fieldName zipcode --notNull
+field string --fieldName countryState --notNull
+field string --fieldName country --notNull
+
+entity jpa --class ~.domain.Post --activeRecord false --testAutomatically
+field string --fieldName postType --notNull
+field string --fieldName content --notNull
+field date --fieldName expiration --type java.util.Date --notNull
+
+
+// Define a repository layer for persistence
+repository jpa --interface ~.repository.UsersRepository --entity ~.domain.Users
+repository jpa --interface ~.repository.OrganizationRepository --entity ~.domain.Organization
+repository jpa --interface ~.repository.PostRepository --entity ~.domain.Post
+
+// Define a service/facade layer
+
+service type --interface ~.service.UsersService --entity ~.domain.Users
+service type --interface ~.service.OrganizationService --entity ~.domain.Organization
+service type --interface ~.service.PostService --entity ~.domain.Post
+
+email sender setup --hostServer smtp.gmail.com --username mdshannan@gmail.com --password mypassword --port 587 --protocol SMTP
+field email template --class ~.service.UsersService
+
+web mvc setup
+web mvc all --package ~.web
+
+security setup
+
+
+
+//solr setup
+//solr all
+
+logging setup --level INFO
+

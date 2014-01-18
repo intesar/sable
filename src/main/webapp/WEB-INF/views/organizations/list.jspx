@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" xmlns:table="urn:jsptagdir:/WEB-INF/tags/form/fields" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:list id="pl_com_sable_cb_domain_Organization" items="${organizations}" z="vs22E9e0aGGI1TWbqRuX5R8CNQk=">
+        <table:table data="${organizations}" id="l_com_sable_cb_domain_Organization" path="/organizations" z="F7KtLuuBE3QhMr7jV0Ciap27log=">
+            <table:column id="c_com_sable_cb_domain_Organization_name" property="name" z="hhT+4Cqv6wEo/RZVp2LH0t34Des="/>
+            <table:column id="c_com_sable_cb_domain_Organization_street" property="street" z="xqd8SyCyF5a/vUbZxnzdxIRvRpY="/>
+            <table:column id="c_com_sable_cb_domain_Organization_city" property="city" z="lA6zhHbdnjx00f7yv6DeKHp0lb4="/>
+            <table:column id="c_com_sable_cb_domain_Organization_zipcode" property="zipcode" z="ZpxOYFIznlcmRDjPae0b4j6qhTg="/>
+            <table:column id="c_com_sable_cb_domain_Organization_countryState" property="countryState" z="Sh4AFB0wfPeQJPsWpfh4S4KKN/c="/>
+            <table:column id="c_com_sable_cb_domain_Organization_country" property="country" z="d85eca/bM/WFIuyphgWnfz0jcbo="/>
+        </table:table>
+    </page:list>
+</div>

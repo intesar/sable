@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:show id="ps_com_sable_cb_domain_Organization" object="${organization}" path="/organizations" z="GMOo+5HjAkdF9qpurwD1xOUO6h0=">
+        <field:display field="name" id="s_com_sable_cb_domain_Organization_name" object="${organization}" z="yEsUXkAq5EFMLiiVsI2zYrjVEvU="/>
+        <field:display field="street" id="s_com_sable_cb_domain_Organization_street" object="${organization}" z="CNVMNaXpjGSRDZqilQXA8lYfGM8="/>
+        <field:display field="city" id="s_com_sable_cb_domain_Organization_city" object="${organization}" z="0TZaVze837CPjKUtpulv0qahW1g="/>
+        <field:display field="zipcode" id="s_com_sable_cb_domain_Organization_zipcode" object="${organization}" z="+Q/4HlIe34bgbw4RlCGDnUHeDBM="/>
+        <field:display field="countryState" id="s_com_sable_cb_domain_Organization_countryState" object="${organization}" z="I3K2rmCGEZ8Y846422d6Ho/DuEU="/>
+        <field:display field="country" id="s_com_sable_cb_domain_Organization_country" object="${organization}" z="x6dITqAUK4bjd68zNOC3GshuzgQ="/>
+    </page:show>
+</div>

@@ -1,0 +1,34 @@
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log opened at 2014-01-18 15:19:41
+project --topLevelPackage com.sable.cb --packaging WAR
+jpa setup --provider HIBERNATE --database MYSQL
+entity jpa --class ~.domain.Users --activeRecord false --testAutomatically
+field string --fieldName fullname --notNull
+field string --fieldName email --notNull
+field string --fieldName password --notNull
+entity jpa --class ~.domain.Organization --activeRecord false --testAutomatically
+field string --fieldName name --notNull
+field string --fieldName street --notNull
+field string --fieldName city --notNull
+field string --fieldName zipcode --notNull
+field string --fieldName countryState --notNull
+field string --fieldName country --notNull
+entity jpa --class ~.domain.Post --activeRecord false --testAutomatically
+field string --fieldName postType --notNull
+field string --fieldName content --notNull
+field date --fieldName expiration --type java.util.Date --notNull
+repository jpa --interface ~.repository.UsersRepository --entity ~.domain.Users
+repository jpa --interface ~.repository.OrganizationRepository --entity ~.domain.Organization
+repository jpa --interface ~.repository.PostRepository --entity ~.domain.Post
+service type --interface ~.service.UsersService --entity ~.domain.Users
+service type --interface ~.service.OrganizationService --entity ~.domain.Organization
+service type --interface ~.service.PostService --entity ~.domain.Post
+email sender setup --hostServer smtp.gmail.com --username mdshannan@gmail.com --password mypassword --port 587 --protocol SMTP
+field email template --class ~.service.UsersService
+web mvc setup
+web mvc all --package ~.web
+security setup
+logging setup --level INFO
+// script --file script
+q
+// Spring Roo 1.2.5.RELEASE [rev 8341dc2] log closed at 2014-01-18 15:19:54
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log opened at 2014-01-18 15:20:24
