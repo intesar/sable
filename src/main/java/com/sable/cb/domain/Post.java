@@ -36,7 +36,6 @@ public class Post {
 	@NotNull
 	private String content;
 
-	@NotNull
 	private String status;
 
 	/**
