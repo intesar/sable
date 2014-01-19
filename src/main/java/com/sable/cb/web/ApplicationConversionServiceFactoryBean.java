@@ -1,8 +1,10 @@
 package com.sable.cb.web;
 
+import com.sable.cb.domain.Masjid;
 import com.sable.cb.domain.Organization;
 import com.sable.cb.domain.Post;
 import com.sable.cb.domain.Users;
+import com.sable.cb.service.MasjidService;
 import com.sable.cb.service.OrganizationService;
 import com.sable.cb.service.PostService;
 import com.sable.cb.service.UsersService;
@@ -32,7 +34,34 @@ public class ApplicationConversionServiceFactoryBean extends FormattingConversio
 
 	@Autowired
     UsersService usersService;
+	
+	@Autowired
+	MasjidService masjidService;
 
+	public Converter<Masjid, String> getMasjidToStringConverter() {
+        return new org.springframework.core.convert.converter.Converter<com.sable.cb.domain.Masjid, java.lang.String>() {
+            public String convert(Masjid masjid) {
+                return new StringBuilder().append(masjid.getName()).append(' ').append(masjid.getStreet()).append(' ').append(masjid.getCity()).append(' ').append(masjid.getZipcode()).append(masjid.getCountryState()).append(masjid.getCountry()).toString();
+            }
+        };
+    }
+
+    public Converter<Long, Masjid> getIdToMasjidConverter() {
+        return new org.springframework.core.convert.converter.Converter<java.lang.Long, com.sable.cb.domain.Masjid>() {
+            public com.sable.cb.domain.Masjid convert(java.lang.Long id) {
+                return masjidService.findMasjid(id);
+            }
+        };
+    }
+
+    public Converter<String, Masjid> getStringToMasjidConverter() {
+        return new org.springframework.core.convert.converter.Converter<java.lang.String, com.sable.cb.domain.Masjid>() {
+            public com.sable.cb.domain.Masjid convert(String id) {
+                return getObject().convert(getObject().convert(id, Long.class), Masjid.class);
+            }
+        };
+    }
+	
 	public Converter<Organization, String> getOrganizationToStringConverter() {
         return new org.springframework.core.convert.converter.Converter<com.sable.cb.domain.Organization, java.lang.String>() {
             public String convert(Organization organization) {
@@ -106,6 +135,9 @@ public class ApplicationConversionServiceFactoryBean extends FormattingConversio
     }
 
 	public void installLabelConverters(FormatterRegistry registry) {
+        registry.addConverter(getMasjidToStringConverter());
+        registry.addConverter(getIdToMasjidConverter());
+        registry.addConverter(getStringToMasjidConverter());
         registry.addConverter(getOrganizationToStringConverter());
         registry.addConverter(getIdToOrganizationConverter());
         registry.addConverter(getStringToOrganizationConverter());

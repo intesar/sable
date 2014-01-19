@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Register Masjid</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet"
+	href="http://code.jquery.com/mobile/1.4.0/jquery.mobile-1.4.0.min.css" />
+<script src="http://code.jquery.com/jquery-1.9.0.js"></script>
+<script
+	src="http://code.jquery.com/mobile/1.4.0/jquery.mobile-1.4.0.min.js"></script>
+
+<script type="text/javascript">
+	$(function() {
+		// Handler for .ready() called.
+		$("#masjid-details-submit").bind("click", function(event, ui) {
+			alert('me');
+			$.ajax({
+				type : "POST",
+				url : "/cb/masjid/save",
+				data : JSON.stringify({
+					"name" : $("#masjid-name").val(),
+					"street" : $("#masjid-street").val(),
+					"city" : $("#masjid-city").val(),
+					"zipcode" : $("#masjid-zipcode").val(),
+					"countryState" : $("#masjid-state").val(),
+					"country" : $("#masjid-country").val()
+				}),
+				contentType : "application/json; charset=utf-8",
+				// TODO
+				//success: successPost,
+				dataType : 'json'
+			});
+		});
+	});
+</script>
+</head>
+
+<body>
+	<div data-role="page">
+
+		<div data-role="header">
+			<h1>Register Masjid</h1>
+		</div>
+		<!-- /header -->
+
+		<div role="main" class="ui-content">
+			
+			<label for="masjidName">Name of Masjid:</label>
+			<input type="text" name="masjidName" id="#masjid-name" placeholder="Masjid name">
+			
+			<label for="street">Street:</label>
+			<input type="text" name="street" id="#masjid-street" placeholder="Street">
+			
+			<label for="city">City:</label>
+			<input type="text" name="city" id="#masjid-city" placeholder="City">
+			
+			<label for="countryState">State:</label>
+			<input type="text" name="countryState" id="#masjid-state" placeholder="State">
+			
+			<label for="zipcode">Zipcode:</label>
+			<input type="text" name="zipcode" id="#masjid-zipcode" placeholder="Zipcode">
+			
+			<label for="country">Country:</label>
+			<input type="text" name="country" id="#masjid-country" placeholder="Country">
+
+			<button class="ui-btn ui-btn-inline" id="masjid-details-submit">Submit</button>
+		</div>
+	</div>
+	<!-- /content -->
+
+	<div data-role="footer">
+		<h4>Page Footer</h4>
+	</div>
+	<!-- /footer -->
+	</div>
+	<!-- /page -->
+</body>
+</html>
