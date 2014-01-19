@@ -1,5 +1,7 @@
 package com.sable.cb.service;
 import com.sable.cb.domain.Masjid;
+import com.sable.cb.domain.Organization;
+
 import java.util.List;
 
 public interface MasjidService {
@@ -20,6 +22,8 @@ public interface MasjidService {
 
 
     public abstract void saveMasjid(Masjid organization);
+    
+    public abstract void saveMasjid(Organization organization);
 
 
     public abstract Masjid updateMasjid(Masjid organization);
