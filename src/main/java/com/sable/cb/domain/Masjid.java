@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 
@@ -41,6 +42,9 @@ public class Masjid {
      */
     @NotNull
     private String country;
+    
+    @OneToOne
+    private Users admin;
 
     public String toString() {
         return ReflectionToStringBuilder.toString(this, ToStringStyle.SHORT_PREFIX_STYLE);
@@ -117,5 +121,13 @@ public class Masjid {
 
     public void setVersion(Integer version) {
         this.version = version;
+    }
+
+    public Users getAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(Users admin) {
+        this.admin = admin;
     }
 }

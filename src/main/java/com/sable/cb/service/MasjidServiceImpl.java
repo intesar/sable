@@ -1,9 +1,15 @@
 package com.sable.cb.service;
 
 import com.sable.cb.domain.Masjid;
+import com.sable.cb.domain.Users;
 import com.sable.cb.repository.MasjidRepository;
+import com.sable.cb.repository.UsersRepository;
+
 import java.util.List;
+
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,6 +19,12 @@ public class MasjidServiceImpl implements MasjidService {
 
     @Autowired
     MasjidRepository masjidRepository;
+    
+    @Autowired
+    UsersRepository usersRepository;
+    
+    @Autowired
+    EmailService emailService;
 
     public long countAllMasjids() {
         return masjidRepository.count();
@@ -35,7 +47,19 @@ public class MasjidServiceImpl implements MasjidService {
     }
 
     public void saveMasjid(Masjid masjid) {
+        
+        String user = SecurityContextHolder.getContext().getAuthentication().getName();
+        
+        Users users = usersRepository.findByEmail(user);
+        if(users == null) {
+            throw new RuntimeException("No Admin found. Masjid must have an admin. Masjid not added.");
+        }
+        masjid.setAdmin(users);
         masjidRepository.save(masjid);
+        
+        String link = String.format("\n Masjid "+masjid.getName()+" has been created successfully, and you are the admin.");
+        emailService.sendMessage(user, "Masjid "+masjid.getName()+" created successfully", link);
+        
     }
 
     public Masjid updateMasjid(Masjid masjid) {
