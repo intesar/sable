@@ -39,4 +39,11 @@ public interface PostService {
 	public abstract List<Post> findEligiblePosts(int firstResult,
 			int maxResults);
 
+
+	public abstract Post like(Long id);
+	
+	public abstract Post dislike(Long id);
+	
+	public abstract Post rsvp(Long id, int guests);
+
 }

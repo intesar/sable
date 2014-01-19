@@ -9,12 +9,14 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Version;
@@ -52,6 +54,18 @@ public class Post {
 	private Date expiration;
 
 	private String user;
+
+	@JsonIgnore
+	@OneToMany
+	private Set<Users> likes = new HashSet<Users>();
+
+	@JsonIgnore
+	@OneToMany
+	private Set<Users> dislikes = new HashSet<Users>();
+
+	@JsonIgnore
+	@OneToMany(cascade=CascadeType.ALL)
+	private Set<Rsvp> rsvps = new HashSet<Rsvp>();
 
 	@JsonIgnore
 	@ManyToMany
@@ -143,6 +157,30 @@ public class Post {
 
 	public void setRejectedOrgs(Set<Organization> rejectedOrgs) {
 		this.rejectedOrgs = rejectedOrgs;
+	}
+
+	public Set<Users> getLikes() {
+		return likes;
+	}
+
+	public void setLikes(Set<Users> likes) {
+		this.likes = likes;
+	}
+
+	public Set<Users> getDislikes() {
+		return dislikes;
+	}
+
+	public void setDislikes(Set<Users> dislikes) {
+		this.dislikes = dislikes;
+	}
+
+	public Set<Rsvp> getRsvps() {
+		return rsvps;
+	}
+
+	public void setRsvps(Set<Rsvp> rsvps) {
+		this.rsvps = rsvps;
 	}
 
 	public String toString() {

@@ -93,6 +93,31 @@ public class PostRestController {
 		return postService.findEligiblePosts(firstResult, maxResults);
 	}
 	
+	@RequestMapping(value="/post/like/{id}", method = RequestMethod.POST)
+	@ResponseBody
+	public Post like(@PathVariable Long id) {
+		
+		logger.info("like = " + id);
+		
+		return postService.like(id);
+	}
 	
+	@RequestMapping(value="/post/dislike/{id}", method = RequestMethod.POST)
+	@ResponseBody
+	public Post dislike(@PathVariable Long id) {
+		
+		logger.info("dislike = " + id);
+		
+		return postService.dislike(id);
+	}
+	
+	@RequestMapping(value="/post/rsvp/{id}/{guests}", method = RequestMethod.POST)
+	@ResponseBody
+	public Post rsvp(@PathVariable Long id, @PathVariable int guests) {
+		
+		logger.info("rsvp = " + id + " guests " + guests);
+		
+		return postService.rsvp(id, guests);
+	}
 	
 }

@@ -25,7 +25,7 @@ public class EmailServiceImpl implements EmailService {
 	@Async
 	public void sendMessage(String mailTo, String subject, String message) {
 		
-		logger.info("sending email");
+		logger.info("sending email " + mailTo);
 		
 		SimpleMailMessage mailMessage = new SimpleMailMessage();
 		mailMessage.setFrom(mailFrom);

@@ -5,6 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet"
 	href="http://code.jquery.com/mobile/1.4.0/jquery.mobile-1.4.0.min.css" />
+	<style type="text/css">
+.ui-input-text
+{
+width: 15px !important;
+}
+</style>
 <script src="http://code.jquery.com/jquery-1.9.0.js"></script>
 <script
 	src="http://code.jquery.com/mobile/1.4.0/jquery.mobile-1.4.0.min.js"></script>
@@ -17,13 +23,15 @@
 				var items = [];
 				  $.each( data, function( i, p ) {
 					  if (p.postType == 'GENERAL') {
-				    	items.push( "<div class='" + p.id + "'>" + p.content + "</div>" );
+				    	items.push( "<div class='" + p.id + "'>" + p.content + "</div><hr>" );
 					  }
 					  else if (p.postType == 'POLL') {
-						  items.push( "<div>" + p.content + "</div><div> <a href='#' class='like " + p.id + "'> Like </a> &nbsp;&nbsp; <a href='#' class='dislike " + p.id + "'> Dislike </a></div>" );
+						  items.push( "<div>" + p.content + "</div><div> <a href='#' class='like " + p.id + "'> Like </a> &nbsp;&nbsp; <a href='#' class='dislike " + p.id + "'> Dislike </a></div><hr>" );
 					  }
 					  else { 
-						  items.push( "<div id='" + p.id + "'>" + p.content + ", " + p.postType + "</div>" );
+						  var x = '<label for="textinput-hide" class="ui-hidden-accessible">Text Input:</label>'
+						  x+= '<input type="text" data-mini="true" name="textinput-hide" id="textinput-hide" placeholder="Text input" value="1">'
+						  items.push( "<div>" + p.content + "</div><div>" + x +" <a href='#' class='yes " + p.id + "'> Yes </a> &nbsp;&nbsp; <a href='#' class='no " + p.id + "'> No </a></div><hr>" );
 				  	  }
 				    //alert(p.content)
 				  });
@@ -33,6 +41,24 @@
 				    html: items.join( "" )
 				  }).appendTo( "#body-div" );	
 			})	
+			
+			$( document ).on( "click", "a.like", function() {
+				var postId = this.className.toString().split(' ')[1];
+				
+			})
+			
+			$(".like").bind('click', function(event, ui) {
+				var postId = this.className.toString().split(' ')[1];
+			})
+			
+			$(".yes").bind('click', function(event, ui) {
+				var postId = this.className.toString().split(' ')[1];
+				
+			})
+			
+			$(".no").bind('click', function(event, ui) {
+				var postId = this.className.toString().split(' ')[1];
+			})
 		
 	});
 </script>
@@ -40,13 +66,8 @@
 
 <body>
 	<div data-role="page">
-
-		
 		<div data-role="content">
-
-
 		<div class="body-div" id="body-div"></div>
-		
 		<input type="submit" data-inline="true" id="old-post-btn" value="old posts">
 
 		</div>
