@@ -2,6 +2,8 @@ package com.sable.cb.domain;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.HashSet;
@@ -51,12 +53,15 @@ public class Post {
 
 	private String user;
 
+	@JsonIgnore
 	@ManyToMany
 	private Set<Organization> postedOrgs = new HashSet<Organization>();
 
+	@JsonIgnore
 	@ManyToMany
 	private Set<Organization> approvedOrgs = new HashSet<Organization>();
 
+	@JsonIgnore
 	@ManyToMany
 	private Set<Organization> rejectedOrgs = new HashSet<Organization>();
 

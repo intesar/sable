@@ -12,6 +12,11 @@ import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.domain.Sort.Order;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -155,7 +160,8 @@ public class PostServiceImpl implements PostService {
 		post.getApprovedOrgs().add(org);
 		post.setStatus(PostStatus.APPROVED.toString());
 		postRepository.save(post);
-		
+		String post_ = String.format("Your post: %s", post.getContent());
+		emailService.sendMessage(post.getUser(), String.format("Post is approved by %s!", org.getName()), post_);
 	}
 
 	@Override
@@ -169,8 +175,29 @@ public class PostServiceImpl implements PostService {
 			post.setStatus(PostStatus.REJECTED.toString());
 			String post_ = String.format("Your post: %s", post.getContent());
 			emailService.sendMessage(post.getUser(), "Post is rejected by all Organizations!", post_);
+		} else {
+			String post_ = String.format("Your post: %s", post.getContent());
+			emailService.sendMessage(post.getUser(), String.format("Post is rejected by %s!", org.getName()), post_);
 		}
 		postRepository.save(post);
 		
+	}
+
+	@Override
+	public List<Post> findEligiblePosts(final int firstResult, final int maxResults) {
+		// find approved posts from user followed orgs.
+		String user = SecurityContextHolder.getContext().getAuthentication().getName();
+        
+        Users users = usersRepository.findByEmail(user);
+        if(CollectionUtils.isEmpty(users.getAdminOrgs())) {
+        	//throw new RuntimeException("Ad cannot be posted if you are not following an org.");
+        	// TODO
+        }
+        final Pageable page2 = new PageRequest(
+        		firstResult, maxResults, new Sort(
+        		    new Order(Direction.DESC, "expiration")
+        		  )
+        		);
+        return postRepository.findEligiblePosts(users.getFollowedOrgs());
 	}
 }

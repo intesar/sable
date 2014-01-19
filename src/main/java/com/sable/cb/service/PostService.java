@@ -35,4 +35,8 @@ public interface PostService {
 
 	public abstract void reject(Long orgId, Long postId);
 
+
+	public abstract List<Post> findEligiblePosts(int firstResult,
+			int maxResults);
+
 }

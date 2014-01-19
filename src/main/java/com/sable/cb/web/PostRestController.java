@@ -1,6 +1,7 @@
 package com.sable.cb.web;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.List;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.log4j.Logger;
@@ -18,7 +19,6 @@ import com.sable.cb.service.PostService;
 import com.sable.cb.service.PostStatus;
 import com.sable.cb.service.PostType;
 
-//@RequestMapping("/rest/posts")
 @Controller
 public class PostRestController {
 
@@ -82,6 +82,15 @@ public class PostRestController {
 		
 		postService.reject(orgId, postId);
 		return "Done";
+	}
+	
+	@RequestMapping(value="/post/{firstResult}/{maxResults}", method = RequestMethod.GET)
+	@ResponseBody
+	public List<Post> getAll(@PathVariable int firstResult, @PathVariable int maxResults) {
+		
+		logger.info("getAll = " + firstResult + " " + maxResults);
+		
+		return postService.findEligiblePosts(firstResult, maxResults);
 	}
 	
 	
