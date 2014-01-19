@@ -19,27 +19,27 @@ public class Organization {
 
     /**
      */
-    @NotNull
+    
     private String street;
 
     /**
      */
-    @NotNull
+    
     private String city;
 
     /**
      */
-    @NotNull
+    
     private String zipcode;
 
     /**
      */
-    @NotNull
+    
     private String countryState;
 
     /**
      */
-    @NotNull
+    
     private String country;
 
 	public String toString() {

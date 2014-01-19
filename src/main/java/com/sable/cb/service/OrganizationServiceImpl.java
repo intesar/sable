@@ -3,6 +3,8 @@ package com.sable.cb.service;
 import com.sable.cb.domain.Organization;
 import com.sable.cb.repository.OrganizationRepository;
 import java.util.List;
+
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,6 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class OrganizationServiceImpl implements OrganizationService {
 
+	private final Logger logger = Logger.getLogger(getClass());
+	
 	@Autowired
     OrganizationRepository organizationRepository;
 
@@ -35,6 +39,7 @@ public class OrganizationServiceImpl implements OrganizationService {
     }
 
 	public void saveOrganization(Organization organization) {
+		logger.info(organization.toString());
         organizationRepository.save(organization);
     }
 
