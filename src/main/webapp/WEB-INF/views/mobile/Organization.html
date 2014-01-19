@@ -34,7 +34,9 @@
     </form>
 </div>
 	</div><!-- /content -->
-<div id="target"></div>
+    <fieldset data-role="controlgroup" id="target">
+
+                </fieldset>
 	<div data-role="footer">
 		<h4>Page Footer</h4>
 	</div><!-- /footer -->
@@ -45,7 +47,7 @@
 function getAllOrganizations () {
 
     jQuery.ajax({
-        type: "POST",
+        type: "GET",
         url: "http://localhost:8081/cb/organizations/getByLoc",
         contentType: "application/json; charset=utf-8",
         dataType: "json",
@@ -55,18 +57,24 @@ function getAllOrganizations () {
                 var txt = "";
                 if(len > 0){
                     for(vari=0;i<data;i++){
-                        if(data[i].city && data[i].city){
-                            txt += "<tr><td>"+data[i].city+"</td><td>"+data[i].cStatus+"</td></tr>";
+                        var masjidName =   data[i].name; 
+                            txt += "<tr><td>"+masjidName+"</td></tr>";
+                            
+                            $.each(data, function(name,hash){
+                            	txt += '<input type="checkbox" name="checkbox-' + hash + '" id="checkbox-' + hash + '" value="' + hash + '" class="custom" />';
+                            	txt += '<label for="checkbox-' + hash + '">' + masjidName + '</label>';
+                            });
+
+                            $('#target').append(text);
+                            
+                            
+                            
                         }
                     }
         	
                 }
         	
-                var checkBox = $('<input type="radio" name="rbtnCount" />');
-                for(i=0; i<20; i++)
-                {
-                    radioBtn.appendTo('#target');
-                }
+              
         	
         	
         	
