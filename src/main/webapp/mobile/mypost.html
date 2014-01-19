@@ -30,7 +30,7 @@ width: 15px !important;
 					  }
 					  else { 
 						  var x = '<label for="textinput-hide" class="ui-hidden-accessible">Text Input:</label>'
-						  x+= '<input type="text" data-mini="true" name="textinput-hide" id="textinput-hide" placeholder="Text input" value="1">'
+						  x+= '<input type="text" data-mini="true" name="textinput-hide" class="guests-' + p.id +'" placeholder="Text input" value="1">'
 						  items.push( "<div>" + p.content + "</div><div>" + x +" <a href='#' class='yes " + p.id + "'> Yes </a> &nbsp;&nbsp; <a href='#' class='no " + p.id + "'> No </a></div><hr>" );
 				  	  }
 				    //alert(p.content)
@@ -44,16 +44,26 @@ width: 15px !important;
 			
 			$( document ).on( "click", "a.like", function() {
 				var postId = this.className.toString().split(' ')[1];
-				
+				$.ajax({
+					type : "POST",
+					url : "/cb/post/like/" + postId,
+				});
 			})
 			
-			$(".like").bind('click', function(event, ui) {
+			$( document ).on( "click", "a.dislike", function() {
 				var postId = this.className.toString().split(' ')[1];
+				$.ajax({
+					type : "POST",
+					url : "/cb/post/dislike/" + postId,
+				});
 			})
 			
-			$(".yes").bind('click', function(event, ui) {
+			$( document ).on( "click", "a.yes", function() {
 				var postId = this.className.toString().split(' ')[1];
-				
+				$.ajax({
+					type : "POST",
+					url : "/cb/post/rsvp/" + postId + "/" + $(".guests-"+postId).val(),
+				});
 			})
 			
 			$(".no").bind('click', function(event, ui) {
