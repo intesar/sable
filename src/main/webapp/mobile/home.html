@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Page Title</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet"
+	href="http://code.jquery.com/mobile/1.4.0/jquery.mobile-1.4.0.min.css" />
+<script src="http://code.jquery.com/jquery-1.9.0.js"></script>
+<script
+	src="http://code.jquery.com/mobile/1.4.0/jquery.mobile-1.4.0.min.js"></script>
+
+
+<script src="http://code.jquery.com/jquery-1.9.0.js"></script>
+<script
+	src="http://code.jquery.com/mobile/1.4.0/jquery.mobile-1.4.0.min.js"></script>
+
+<script type="text/javascript">
+	$(function() {
+		// Handler for .ready() called.
+		
+			$.getJSON( "/cb/post/0/100", function( data ) {
+				var items = [];
+				  $.each( data, function( i, p ) {
+					  if (p.postType == 'GENERAL') {
+				    	items.push( "<div class='" + p.id + "'>" + p.content + "</div><hr>" );
+					  }
+					  else if (p.postType == 'POLL') {
+						  items.push( "<div>" + p.content + "</div><div> <a href='#' class='like " + p.id + "'> Like </a> &nbsp;&nbsp; <a href='#' class='dislike " + p.id + "'> Dislike </a></div><hr>" );
+					  }
+					  else { 
+						  var x = '<label for="textinput-hide" class="ui-hidden-accessible">Text Input:</label>'
+						  x+= '<input type="text" data-mini="true" name="textinput-hide" class="guests-' + p.id +'" placeholder="Text input" value="1">'
+						  items.push( "<div>" + p.content + "</div><div>" + x +" <a href='#' class='yes " + p.id + "'> Yes </a> &nbsp;&nbsp; <a href='#' class='no " + p.id + "'> No </a></div><hr>" );
+				  	  }
+				    //alert(p.content)
+				  });
+				 
+				  $( "<div/>", {
+				    "class": "my-new-list",
+				    html: items.join( "" )
+				  }).appendTo( "#body-div" );	
+			})	
+			
+			$( document ).on( "click", "a.like", function() {
+				var postId = this.className.toString().split(' ')[1];
+				$.ajax({
+					type : "POST",
+					url : "/cb/post/like/" + postId,
+				});
+			})
+			
+			$( document ).on( "click", "a.dislike", function() {
+				var postId = this.className.toString().split(' ')[1];
+				$.ajax({
+					type : "POST",
+					url : "/cb/post/dislike/" + postId,
+				});
+			})
+			
+			$( document ).on( "click", "a.yes", function() {
+				var postId = this.className.toString().split(' ')[1];
+				$.ajax({
+					type : "POST",
+					url : "/cb/post/rsvp/" + postId + "/" + $(".guests-"+postId).val(),
+				});
+			})
+			
+			$(".no").bind('click', function(event, ui) {
+				var postId = this.className.toString().split(' ')[1];
+			})
+		
+	});
+</script>
+
+<script type="text/javascript">
+	$(function() {
+		// Handler for .ready() called.
+		$("#post-content-submit").bind("click", function(event, ui) {
+			$.ajax({
+				type : "POST",
+				url : "/cb/post/rest",
+				data : $("#post-content").val(),
+				contentType : "application/json; charset=utf-8",
+				// TODO
+				//success: successPost,
+				dataType : 'json'
+			});
+		});
+	});
+</script>
+</head>
+
+<body>
+
+	<div data-role="page" id="left-panel" data-theme="b">
+	<div data-role="header">
+		<h1>Menu</h1>
+	</div>
+		<div role="main" class="ui-content">
+		<a href="#wall" data-rel="close"
+			class="ui-btn ui-corner-all ui-shadow ui-mini">Home</a>
+			
+		<a href="#ad" data-rel="close"
+			class="ui-btn ui-corner-all ui-shadow ui-mini">Ad</a> 
+			
+		<a href="#adminPost" data-rel="close"
+			class="ui-btn ui-corner-all ui-shadow ui-mini">Admin Post</a>
+			
+		<a href="#registerOrg" data-rel="close"
+			class="ui-btn ui-corner-all ui-shadow ui-mini">Register Org</a>
+			
+		<a href="#followOrg" data-rel="close"
+			class="ui-btn ui-corner-all ui-shadow ui-mini">Follow Orgs</a>
+		</div>
+	</div>
+
+
+	<div data-role="page" id="wall" data-url="demo-page">
+
+		<div data-role="header" data-theme="b">
+			<h1>Gazelle</h1>
+			<a href="#left-panel" data-icon="carat-l" data-iconpos="notext"
+				data-shadow="false" data-iconshadow="false" class="ui-nodisc-icon">Open
+				left panel</a>
+		</div>
+		<div data-role="content">
+			<div class="body-div" id="body-div"></div>
+		</div>
+	</div>
+	
+	<div data-role="page" id="ad" data-url="demo-page">
+
+		<div data-role="header" data-theme="b">
+			<h1>Gazelle</h1>
+			<a href="#left-panel" data-icon="carat-r" data-iconpos="notext"
+				data-shadow="false" data-iconshadow="false" class="ui-nodisc-icon">Open
+				left panel</a>
+			Ad
+		</div>
+	</div>
+	
+	<div data-role="page" id="adminPost" data-url="demo-page">
+
+		<div data-role="header" data-theme="b">
+			<h1>Gazelle</h1>
+			<a href="#left-panel" data-icon="carat-r" data-iconpos="notext"
+				data-shadow="false" data-iconshadow="false" class="ui-nodisc-icon">Open
+				left panel</a>
+			Ad
+		</div>
+	</div>
+	
+	<div data-role="page" id="registerOrg" data-url="demo-page">
+
+		<div data-role="header" data-theme="b">
+			<h1>Gazelle</h1>
+			<a href="#left-panel" data-icon="carat-r" data-iconpos="notext"
+				data-shadow="false" data-iconshadow="false" class="ui-nodisc-icon">Open
+				left panel</a>
+			Ad
+		</div>
+	</div>
+	
+	<div data-role="page" id="followOrg" data-url="demo-page">
+
+		<div data-role="header" data-theme="b">
+			<h1>Gazelle</h1>
+			<a href="#left-panel" data-icon="carat-r" data-iconpos="notext"
+				data-shadow="false" data-iconshadow="false" class="ui-nodisc-icon">Open
+				left panel</a>
+			Ad
+		</div>
+	</div>
+	
+</body>
+</html>

@@ -130,6 +130,7 @@ public class PostServiceImpl implements PostService {
 					"Ad cannot be posted if you are not following an org.");
 		}
 
+		post.setUser(user);
 		post.getPostedOrgs().addAll(users.getFollowedOrgs());
 		postRepository.saveAndFlush(post);
 
