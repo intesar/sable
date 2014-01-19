@@ -40,4 +40,16 @@ public class PostRestController {
 		postService.savePost(post);
 	}
 	
+	@RequestMapping(value="/post/admin", method = RequestMethod.POST)
+	@ResponseBody
+	public void createByAdmin(@RequestBody Post post) {
+		
+		logger.info("post = " + post.toString());
+		
+		post.setPostType(PostType.valueOf(post.getPostType()).toString());
+		postService.savePostByAdmin(post);
+	}
+	
+	
+	
 }

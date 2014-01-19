@@ -53,6 +53,20 @@ public class PostServiceImpl implements PostService {
         emailService.sendMessage(user, "Post submitted", post.getContent());
         
     }
+	
+	public void savePostByAdmin(Post post) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.add(Calendar.DAY_OF_YEAR, 7);
+		post.setExpiration(calendar.getTime());
+		
+		post.setStatus(PostStatus.APPROVED.toString());
+        postRepository.save(post);
+        
+        // TODO construct email content
+        String user = SecurityContextHolder.getContext().getAuthentication().getName();
+        emailService.sendMessage(user, "Post submitted & auto approved", post.getContent());
+        
+    }
 
 	public Post updatePost(Post post) {
         return postRepository.save(post);

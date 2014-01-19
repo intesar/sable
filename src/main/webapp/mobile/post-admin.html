@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Page Title</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet"
+	href="http://code.jquery.com/mobile/1.4.0/jquery.mobile-1.4.0.min.css" />
+<script src="http://code.jquery.com/jquery-1.9.0.js"></script>
+<script
+	src="http://code.jquery.com/mobile/1.4.0/jquery.mobile-1.4.0.min.js"></script>
+
+<script type="text/javascript">
+	$(function() {
+		// Handler for .ready() called.
+		$("#admin-post-btn").bind("click", function(event, ui) {
+			$.ajax({
+				type : "POST",
+				url : "/cb/post/admin",
+				data : JSON.stringify({
+					"postType" : $("#post-type").val(),
+					"content" : $("#admin-post-content").val()
+				}),
+				contentType : "application/json; charset=utf-8",
+				// TODO
+				//success: successPost,
+				dataType : 'json'
+			});
+		});
+	});
+</script>
+</head>
+
+<body>
+	<div data-role="page">
+
+		
+		<div data-role="content">
+
+
+		<div class="ui-field-contain">
+    		<label for="post-type">Post Type:</label>
+    		<select name="post-type" id="post-type">
+        		<option value="GENERAL">General or Notice</option>
+        		<option value="POLL">Poll (simple Like/Dislike option will be shown to user)</option>
+        		<option value="RSVP" selected="selected">RSVP</option>
+    		</select>
+		</div>
+
+		<label for="text-basic">Ad content:</label>
+		<textarea name="admin-post-content" id="admin-post-content"></textarea>
+		
+		<input type="submit" data-inline="true" id="admin-post-btn" value="Request">
+
+		</div>
+	</div>
+</body>
+</html>

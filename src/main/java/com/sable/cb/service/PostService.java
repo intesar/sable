@@ -20,6 +20,8 @@ public interface PostService {
 
 
 	public abstract void savePost(Post post);
+	
+	public void savePostByAdmin(Post post);
 
 
 	public abstract Post updatePost(Post post);
