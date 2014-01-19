@@ -6,19 +6,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.sable.cb.domain.Masjid;
 import com.sable.cb.domain.Organization;
+import com.sable.cb.service.MasjidService;
 import com.sable.cb.service.OrganizationService;
 
-@RequestMapping("/masjid")
+//@RequestMapping("/masjid")
 @Controller
 public class MasjidController {
 
     @Autowired
-    OrganizationService organizationService;
+    MasjidService masjidService;
 
-    @RequestMapping(value="/rest", method = RequestMethod.POST)
+    @RequestMapping(value="/rest/savemasjid", method = RequestMethod.POST)
     @ResponseBody
-    public void create(@RequestBody Organization organization) {
-    	organizationService.saveOrganization(organization);
+    public void create(@RequestBody Masjid masjid) {
+    	masjidService.saveMasjid(masjid);
     }
 }
