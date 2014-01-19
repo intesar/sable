@@ -11,14 +11,14 @@ import com.sable.cb.domain.Organization;
 import com.sable.cb.service.MasjidService;
 import com.sable.cb.service.OrganizationService;
 
-//@RequestMapping("/masjid")
+@RequestMapping("/masjid")
 @Controller
 public class MasjidController {
 
     @Autowired
     MasjidService masjidService;
 
-    @RequestMapping(value="/rest/savemasjid", method = RequestMethod.POST)
+    @RequestMapping(value="/save", method = RequestMethod.POST)
     @ResponseBody
     public void create(@RequestBody Masjid masjid) {
     	masjidService.saveMasjid(masjid);
