@@ -1,26 +1,41 @@
 package com.sable.cb.web;
-import com.sable.cb.domain.Users;
-import com.sable.cb.service.UsersService;
 import java.io.UnsupportedEncodingException;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.util.UriUtils;
 import org.springframework.web.util.WebUtils;
+
+import com.sable.cb.domain.Users;
+import com.sable.cb.service.UsersService;
 
 @RequestMapping("/userses")
 @Controller
 public class UsersController {
 
+	Logger logger = Logger.getLogger(getClass());
+	
 	@Autowired
     UsersService usersService;
+	
+	@RequestMapping(value="/rest", method = RequestMethod.POST)
+	@ResponseBody
+	public void create(@RequestBody Users user) {
+		logger.info("content = " + user.toString());
+		usersService.saveUsers(user);
+	}
 
 	@RequestMapping(method = RequestMethod.POST, produces = "text/html")
     public String create(@Valid Users users, BindingResult bindingResult, Model uiModel, HttpServletRequest httpServletRequest) {
