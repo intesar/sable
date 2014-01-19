@@ -1,4 +1,11 @@
 package com.sable.cb.web;
+
+import com.sable.cb.domain.Organization;
+import com.sable.cb.domain.Post;
+import com.sable.cb.service.OrganizationService;
+import com.sable.cb.service.PostType;
+
+
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 
@@ -10,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,6 +35,7 @@ public class OrganizationController {
 	@Autowired
     OrganizationService organizationService;
 	
+
 	@RequestMapping(value ="/getByLoc", method = RequestMethod.	POST)
 	@ResponseBody()
 	public List getAllOrganization()

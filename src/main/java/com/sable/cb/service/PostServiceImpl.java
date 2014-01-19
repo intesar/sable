@@ -2,8 +2,11 @@ package com.sable.cb.service;
 
 import com.sable.cb.domain.Post;
 import com.sable.cb.repository.PostRepository;
+
+import java.util.Calendar;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,6 +17,9 @@ public class PostServiceImpl implements PostService {
 	@Autowired
     PostRepository postRepository;
 
+	@Autowired
+	EmailService emailService;
+	
 	public long countAllPosts() {
         return postRepository.count();
     }
@@ -35,7 +41,17 @@ public class PostServiceImpl implements PostService {
     }
 
 	public void savePost(Post post) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.add(Calendar.DAY_OF_YEAR, 7);
+		post.setExpiration(calendar.getTime());
+		
+		post.setStatus(PostStatus.PENDING_APPROVAL.toString());
         postRepository.save(post);
+        
+        // TODO construct email content
+        String user = SecurityContextHolder.getContext().getAuthentication().getName();
+        emailService.sendMessage(user, "Post submitted", post.getContent());
+        
     }
 
 	public Post updatePost(Post post) {
