@@ -13,7 +13,15 @@
 	$(function() {
 		// Handler for .ready() called.
 		$("#post-content-submit").bind( "click", function(event, ui) {
-			alert($("#post-content").val());	
+			$.ajax({
+				  type: "POST",
+				  url: "/cb/post/rest",
+				  data: $("#post-content").val(),
+				  contentType:"application/json; charset=utf-8",
+				  // TODO
+				  //success: successPost,
+				  dataType: 'json'
+				});
 		});
 	});
 </script>
