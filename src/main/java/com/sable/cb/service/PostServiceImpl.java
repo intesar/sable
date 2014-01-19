@@ -1,10 +1,16 @@
 package com.sable.cb.service;
 
+import com.sable.cb.domain.Organization;
 import com.sable.cb.domain.Post;
+import com.sable.cb.domain.Users;
+import com.sable.cb.repository.OrganizationRepository;
 import com.sable.cb.repository.PostRepository;
+import com.sable.cb.repository.UsersRepository;
 
 import java.util.Calendar;
 import java.util.List;
+
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -16,6 +22,12 @@ public class PostServiceImpl implements PostService {
 
 	@Autowired
     PostRepository postRepository;
+	
+	@Autowired
+    OrganizationRepository organizationRepository;
+	
+	@Autowired
+	UsersRepository usersRepository ;
 
 	@Autowired
 	EmailService emailService;
@@ -40,17 +52,46 @@ public class PostServiceImpl implements PostService {
         return postRepository.findAll(new org.springframework.data.domain.PageRequest(firstResult / maxResults, maxResults)).getContent();
     }
 
+	@Transactional
 	public void savePost(Post post) {
 		Calendar calendar = Calendar.getInstance();
 		calendar.add(Calendar.DAY_OF_YEAR, 7);
 		post.setExpiration(calendar.getTime());
 		
 		post.setStatus(PostStatus.PENDING_APPROVAL.toString());
-        postRepository.save(post);
+        
+		String user = SecurityContextHolder.getContext().getAuthentication().getName();
+        Users users = usersRepository.findByEmail(user);
+        
+        if(CollectionUtils.isEmpty(users.getFollowedOrgs())) {
+        	//throw new RuntimeException("Ad cannot be posted if you are not following an org.");
+        	System.out.println("abc");
+        }
+        post.getPostedOrgs().addAll(users.getFollowedOrgs());
+        
+        post.setUser(users.getEmail());
+        
+		postRepository.saveAndFlush(post);
         
         // TODO construct email content
-        String user = SecurityContextHolder.getContext().getAuthentication().getName();
-        emailService.sendMessage(user, "Post submitted", post.getContent());
+		// TODO link to expire ad 
+		String link = String.format("\n Delete Post : http://localhost:8080/cb/post/expire/%s", post.getId());
+		String post_ = String.format("Your post: %s", post.getContent());
+		String status = String.format("\n Status: Pending");
+        emailService.sendMessage(user, "Post submitted", post_ + status + link);
+        
+        // TODO send action email to admins
+        for (Organization org : users.getFollowedOrgs()) {
+        	
+        	String org_ = String.format("\n Organization: %s", org.getName());
+        	String approveLink = String.format("\n Approve : http://localhost:8080/cb/post/approve/%s/%s", org.getId(), post.getId());
+        	String rejectLink = String.format("\n Reject : http://localhost:8080/cb/post/reject/%s/%s", org.getId(), post.getId());
+        	
+        	for(Users user_ : org.getAdmins()) {
+        		// TODO send email to approve
+        		emailService.sendMessage(user_.getEmail(), "Post submited, action required", org_ + post_ + approveLink + rejectLink);
+        	}
+        }
         
     }
 	
@@ -59,16 +100,77 @@ public class PostServiceImpl implements PostService {
 		calendar.add(Calendar.DAY_OF_YEAR, 7);
 		post.setExpiration(calendar.getTime());
 		
-		post.setStatus(PostStatus.APPROVED.toString());
-        postRepository.save(post);
+		post.setStatus(PostStatus.PENDING_APPROVAL.toString());
+        
+        String user = SecurityContextHolder.getContext().getAuthentication().getName();
+        
+        Users users = usersRepository.findByEmail(user);
+        if(CollectionUtils.isEmpty(users.getAdminOrgs())) {
+        	throw new RuntimeException("Ad cannot be posted if you are not following an org.");
+        }
+        
+        post.getPostedOrgs().addAll(users.getFollowedOrgs());
+        postRepository.saveAndFlush(post);
         
         // TODO construct email content
-        String user = SecurityContextHolder.getContext().getAuthentication().getName();
-        emailService.sendMessage(user, "Post submitted & auto approved", post.getContent());
+     	// TODO link to expire ad 
+     	String link = String.format("\n Delete : http://localhost:8080/cb/post/expire/%s", post.getId());
+     	String post_ = String.format("Your post: %s", post.getContent());
+     	String status = String.format("\n Status: Pending");
+        emailService.sendMessage(user, "Post submitted", post_ + status + link);
+             
+        // TODO send action email to admins
+        for (Organization org : users.getAdminOrgs()) {
+             	
+        	String org_ = String.format("\n Organization: %s", org.getName());
+            String approveLink = String.format("\n Approve : http://localhost:8080/cb/post/approve/%s/%s", org.getId(), post.getId());
+            String rejectLink = String.format("\n Reject : http://localhost:8080/cb/post/reject/%s/%s", org.getId(), post.getId());
+             	
+            for(Users user_ : org.getAdmins()) {
+            	// TODO send email to approve
+             		emailService.sendMessage(user_.getEmail(), "Post submited, action required", org_ + post_ + approveLink + rejectLink);
+             	}
+             }
         
     }
 
 	public Post updatePost(Post post) {
         return postRepository.save(post);
     }
+
+	@Override
+	public void expirePost(Long postId) {
+		Post post = postRepository.findOne(postId);
+		post.setExpiration(Calendar.getInstance().getTime());
+		post.setStatus(PostStatus.EXPIRED.toString());
+		postRepository.save(post);
+		
+	}
+
+	@Override
+	public void approve(Long orgId, Long postId) {
+		Post post = postRepository.findOne(postId);
+		Organization org = organizationRepository.findOne(orgId);
+		
+		post.getApprovedOrgs().add(org);
+		post.setStatus(PostStatus.APPROVED.toString());
+		postRepository.save(post);
+		
+	}
+
+	@Override
+	public void reject(Long orgId, Long postId) {
+		Post post = postRepository.findOne(postId);
+		Organization org = organizationRepository.findOne(orgId);
+		post.getApprovedOrgs().remove(org);
+		post.getRejectedOrgs().add(org);
+		post.getPostedOrgs().remove(org);
+		if (CollectionUtils.isEmpty(post.getApprovedOrgs()) && CollectionUtils.isEmpty(post.getPostedOrgs())) {
+			post.setStatus(PostStatus.REJECTED.toString());
+			String post_ = String.format("Your post: %s", post.getContent());
+			emailService.sendMessage(post.getUser(), "Post is rejected by all Organizations!", post_);
+		}
+		postRepository.save(post);
+		
+	}
 }

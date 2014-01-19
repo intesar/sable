@@ -15,6 +15,9 @@
         <intercept-url pattern="/login.html" access="permitAll" />
         <intercept-url pattern="/signup.html" access="permitAll" />
         <intercept-url pattern="/signup/**" access="permitAll" />
+        <intercept-url pattern="/post/expire/*" access="permitAll" />
+        <intercept-url pattern="/post/approve/*" access="permitAll" />
+        <intercept-url pattern="/post/reject/*" access="permitAll" />
         <intercept-url pattern="/**" access="isAuthenticated()" />
         <intercept-url pattern="/mobile/**" access="isAuthenticated()" />
     </http>

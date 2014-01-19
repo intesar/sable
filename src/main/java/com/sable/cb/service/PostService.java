@@ -26,4 +26,13 @@ public interface PostService {
 
 	public abstract Post updatePost(Post post);
 
+
+	public abstract void expirePost(Long postId);
+
+
+	public abstract void approve(Long orgId, Long postId);
+
+
+	public abstract void reject(Long orgId, Long postId);
+
 }
