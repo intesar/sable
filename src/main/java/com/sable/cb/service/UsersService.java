@@ -6,9 +6,6 @@ import org.springframework.mail.MailSender;
 
 public interface UsersService {
 
-    
-    public void sendMessage(String mailFrom, String subject, String mailTo, String message);
-
 	public abstract long countAllUserses();
 
 

@@ -13,14 +13,9 @@ import org.springframework.transaction.annotation.Transactional;
 public class UsersServiceImpl implements UsersService {
 	
 	@Autowired
-    private transient MailSender mailTemplate;
+    private EmailService emailService;
 
-    org.springframework.mail.SimpleMailMessage mailMessage = new org.springframework.mail.SimpleMailMessage();
-
-	public void sendMessage(String mailFrom, String subject, String mailTo, String message)
-	{}
-
-	@Autowired
+    @Autowired
     UsersRepository usersRepository;
 
 	public long countAllUserses() {
@@ -45,6 +40,9 @@ public class UsersServiceImpl implements UsersService {
 
 	public void saveUsers(Users users) {
         usersRepository.save(users);
+        // TODO email
+        emailService.sendMessage(users.getEmail(), "Your account is active", "Thanks for signing-up");
+        
     }
 
 	public Users updateUsers(Users users) {
