@@ -1,4 +1,6 @@
 package com.sable.cb.web;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,5 +24,11 @@ public class MasjidController {
     @ResponseBody
     public void create(@RequestBody Masjid masjid) {
     	masjidService.saveMasjid(masjid);
+    }
+
+    @RequestMapping(value="/list", method = RequestMethod.GET)
+    
+    public @ResponseBody List<Masjid> list() {
+        return masjidService.findAllMasjids();
     }
 }

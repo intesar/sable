@@ -25,7 +25,13 @@
 					"country" : $("#masjid-country").val()
 				}),
 				contentType : "application/json; charset=utf-8",
-				dataType : 'json'
+				dataType : 'json',
+				statusCode: {
+					200: function(){
+					$("input[type=text]").val("");
+					alert("Masjid create successfully.");
+				}
+				}
 			});
 		});
 	});
