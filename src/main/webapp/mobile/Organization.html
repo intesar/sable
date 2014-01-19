@@ -1,0 +1,139 @@
+<!DOCTYPE html> 
+<html>
+<head>
+	<title>Page Title</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.0/jquery.mobile-1.4.0.min.css" />
+	<script src="http://code.jquery.com/jquery-1.9.0.js"></script>
+	<script src="http://code.jquery.com/mobile/1.4.0/jquery.mobile-1.4.0.min.js"></script>
+</head>
+
+<body>
+	<div data-role="header">
+		<h1>Gazelle</h1>
+	</div><!-- /header -->
+	<div id="prayerTimes">
+		<table id="prayerTimesTable" border="1" align="right" style="margin-right: 800px;background: #00FF32;">
+			<caption><strong>Prayer Times</strong></caption>
+			<tr>
+				<td>Fajr</td>
+				<td>6:21 AM</td>
+			</tr>
+			<tr>
+				<td>Zuhr</td>
+				<td>12:20 PM</td>
+			</tr>
+			<tr>
+				<td>Asr</td>
+				<td>2:49 PM</td>
+			</tr>
+			<tr>
+				<td>Magrib</td>
+				<td>5:00 PM</td>
+			</tr>
+			<tr>
+				<td>Isha</td>
+				<td>6:30 PM</td>
+			</tr>
+		</table>
+	</div>
+	<div id="followedOrgs"><!-- content --></div>
+	
+	<div id="notFollowedOrgs"><!-- content --></div>
+	<button id="follow" >Follow/Unfollow</button>
+	
+	
+</body>
+<script type="text/javascript">
+
+	var updateData = function(data) {
+		if(data.followedOrgs){
+			var followedOrgs = data.followedOrgs;
+            var len = followedOrgs.length;
+            var txt = "<h3> Followed Organizations </h3>";
+            if(len > 0){
+                for(var i=0;i<len;i++){
+                	var masjidName =   followedOrgs[i].name; 
+                       	txt += '<input type="checkbox" name="checkbox-' + followedOrgs[i].id + '" id="checkbox-' + followedOrgs[i].id + '" checked="true" value="' + followedOrgs[i].id + '" class="custom" />';
+                       	txt += '<label style="display: inline;" for="checkbox-' + followedOrgs[i].id + '">' + masjidName + '</label><br/>';
+                }
+                txt += '<br/> '
+               
+            } else {
+            	txt += "<span> No organizations being followed. </span><br/>";
+            }
+            $('#followedOrgs').html(txt);
+    	}
+    	if(data.nonFollowedOrgs){
+			var nonFollowedOrgs = data.nonFollowedOrgs;
+            var len = nonFollowedOrgs.length;
+            var txt = "<h3> Available Organizations </h3>";
+            if(len > 0){
+                for(var i=0;i<len;i++){
+                	var masjidName = nonFollowedOrgs[i].name; 
+                       	txt += '<input type="checkbox" name="checkbox-' + nonFollowedOrgs[i].id + '" id="checkbox-' + nonFollowedOrgs[i].id + '" value="' + nonFollowedOrgs[i].id + '" class="custom" />';
+                       	txt += '<label style="display: inline;" for="checkbox-' + nonFollowedOrgs[i].id + '">' + masjidName + '</label><br/>';
+                }
+                txt += '<br/> '
+               
+            } else {
+            	txt += "<span> No organizations are available. </span><br/>";
+            }
+            $('#notFollowedOrgs').html(txt);
+    	}
+	}
+
+	var submitData = function(selected) {
+		jQuery.ajax({
+	    	type: "POST",
+	        url: "http://localhost:8081/cb/organizations/follow",
+	        contentType: "application/json; charset=utf-8",
+	        data : JSON.stringify(selected),
+	        dataType: "json",
+	        traditional: true,
+	        success: function (data, status, jqXHR) {
+	        	updateData(data);
+	        }      
+		});
+	}
+$("#follow").bind( "click", function(event, ui) {
+		 var selected = [];
+	 $("input:checkbox:checked").each(function() {
+	       selected.push({
+	           id: $(this).val(),  
+	       });
+	     //name: $("label[for='checkbox-"+ $(this).val() + "']").val()
+		 //selected.push($(this).val());
+	     //selected += $(this).val() + "~";
+	  });
+	 submitData(selected);
+	 
+});
+
+//function getAllOrganizations () {
+	
+	$(document ).ready(function() {
+          jQuery.ajax({
+        type: "GET",
+        url: "http://localhost:8081/cb/organizations/getByLoc",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (data, status, jqXHR) {
+        	/*$('#myDiv').html('<input type="checkbox"/>');*/
+        	updateData(data);
+        }
+    });
+          
+    
+});
+
+	
+
+    
+
+
+
+</script>
+
+
+</html>

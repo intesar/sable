@@ -1,6 +1,10 @@
 package com.sable.cb.domain;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.apache.commons.lang3.builder.ToStringStyle;
+
+import flexjson.JSON;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -44,6 +48,7 @@ public class Masjid {
     private String country;
     
     @OneToOne
+    @JsonIgnore
     private Users admin;
 
     public String toString() {

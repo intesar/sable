@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>View all masjids</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet"
+	href="http://code.jquery.com/mobile/1.4.0/jquery.mobile-1.4.0.min.css" />
+<script src="http://code.jquery.com/jquery-1.9.0.js"></script>
+<script
+	src="http://code.jquery.com/mobile/1.4.0/jquery.mobile-1.4.0.min.js"></script>
+
+<script type="text/javascript">
+	$.ready(function() {
+		alert("in");
+			$.getJSON({"/cb/masjid/list",function(values) {
+				$.each(data, function (index, jd) {
+		             $('#stage').append('<p> ' + jd.name + ' '+jd.city+', '+jd.zipcode+'</p>');
+				    });
+				}
+	          });
+	});
+</script>
+</head>
+
+<body>
+	<div data-role="page">
+
+		<div data-role="header">
+			<h1>List of Masjids</h1>
+		</div>
+		<!-- /header -->
+
+		<div role="main" class="ui-content">			
+			<div id="stage"></div>
+		</div>
+	</div>
+	<!-- /content -->
+
+	<div data-role="footer">
+		<h4>Page Footer</h4>
+	</div>
+	<!-- /footer -->
+	</div>
+	<!-- /page -->
+</body>
+</html>
