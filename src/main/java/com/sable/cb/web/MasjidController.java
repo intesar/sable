@@ -22,7 +22,7 @@ public class MasjidController {
 
     @RequestMapping(value="/save", method = RequestMethod.POST)
     @ResponseBody
-    public void create(@RequestBody Masjid masjid) {
+    public void create(@RequestBody Organization masjid) {
     	masjidService.saveMasjid(masjid);
     }
 

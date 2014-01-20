@@ -1,6 +1,7 @@
 package com.sable.cb.service;
 
 import com.sable.cb.domain.Masjid;
+import com.sable.cb.domain.Organization;
 import com.sable.cb.domain.Users;
 import com.sable.cb.repository.MasjidRepository;
 import com.sable.cb.repository.UsersRepository;
@@ -19,6 +20,9 @@ public class MasjidServiceImpl implements MasjidService {
 
     @Autowired
     MasjidRepository masjidRepository;
+    
+    @Autowired
+    OrganizationService organizationService;
     
     @Autowired
     UsersRepository usersRepository;
@@ -59,6 +63,22 @@ public class MasjidServiceImpl implements MasjidService {
         
         String link = String.format("\n Masjid "+masjid.getName()+" has been created successfully, and you are the admin.");
         emailService.sendMessage(user, "Masjid "+masjid.getName()+" created successfully", link);
+        
+    }
+    
+    public void saveMasjid(Organization org) {
+        
+        String user = SecurityContextHolder.getContext().getAuthentication().getName();
+        
+        Users users = usersRepository.findByEmail(user);
+        if(users == null) {
+            throw new RuntimeException("No Admin found. Masjid must have an admin. Masjid not added.");
+        }
+        org.getAdmins().add(users);
+        organizationService.saveOrganization(org);
+        
+        String link = String.format("\n Masjid "+org.getName()+" has been created successfully, and you are the admin.");
+        emailService.sendMessage(user, "Masjid "+org.getName()+" created successfully", link);
         
     }
 
