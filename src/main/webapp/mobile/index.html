@@ -20,7 +20,13 @@
 				  contentType:"application/json; charset=utf-8",
 				  // TODO
 				  //success: successPost,
-				  dataType: 'json'
+				  dataType: 'json',
+				  statusCode: {
+						200: function(){
+						$("textarea").val("");
+							alert("Post submitted successfully.");
+						}
+					}
 				});
 		});
 	});
