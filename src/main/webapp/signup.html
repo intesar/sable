@@ -9,6 +9,7 @@
 <script type="text/javascript">
 	$(function() {
 		// Handler for .ready() called.
+		$("#notification").hide();
 		$("#signup-btn").bind( "click", function(event, ui) {
 			$.ajax({
 				  type: "POST",
@@ -17,7 +18,13 @@
 				  contentType:"application/json; charset=utf-8",
 				  // TODO
 				  //success: successPost,
-				  dataType: 'json'
+				  dataType: 'json',
+				  statusCode: {
+					200: function(){
+							$("input[typ'text']").val("");
+						  $("#notification").show().delay(5000).fadeOut();
+						}
+					}
 				});
 		});
 	});
@@ -38,9 +45,10 @@
 		    <label for="password" class="ui-hidden-accessible">Password</label> 
 		    <input type="password" name="password" id="password" placeholder="Password" /> 
 				
-			<input type="submit" data-inline="true" id="signup-btn" value="Sign up">
+			<input type="submit" data-inline="true" id="signup-btn" value="Submit">
 
 		</div>
+		<div id="notification">Success. You are now an active user.</div>
 	</div>
 </body>
 </html>
