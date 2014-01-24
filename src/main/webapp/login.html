@@ -9,7 +9,7 @@
 		<div data-role="page">
 			<div data-role="content">
 				<h1>Login</h1>
-				<form name="f" action="resources/j_spring_security_check" method="post">
+				<form name="f" action="resources/j_spring_security_check" method="post" data-ajax="false" >
 					
 					<label for="j_username" class="ui-hidden-accessible">Your email</label>
 					<input type="email" name="j_username" id="email" placeholder="Your email">
@@ -22,7 +22,7 @@
 				</form>
 				
 				<div>
-					<a href="/cb/signup.html">Sign-up</a>
+					<a href="/cb/signup.html" data-ajax="false"  >Sign-up</a>
 				</div>
 				
 			</div>
